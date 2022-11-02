@@ -1,0 +1,26 @@
+version: '3.3'
+services:
+  lint:
+    build: .
+    image: python:3.10.5
+    env_file: .env
+  api:
+    extends:
+      service: lint
+    ports:
+      - '8005:8005'
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    environment:
+      PROJECT_SERVICE_TYPE: 'api'
+  db:
+    image: postgres:11
+    ports:
+      - '5505:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+  
